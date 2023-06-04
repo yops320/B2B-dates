@@ -1,0 +1,30 @@
+<script>
+  //161933000035182 = Exclude holidays from the datepicker
+  if(window.location.href.indexOf('/checkout') != -1) {
+    var unavailable_dates = ['29/05/2023','30/05/2023','31/05/2023','01/06/2023','02/06/2023','05/06/2023','06/06/2023'];
+	var date_format = 'dd/mm/yy';
+	const mutationObserver = new MutationObserver((mutations) => {
+		mutations.forEach((mutation) => {
+			$('#quote_shipping').datepicker({
+                dateFormat: 'dd/mm/yy',
+                defaultDate: '07/06/2023',
+				beforeShowDay: function(date){
+				var day = date.getDay();
+				var dmy = jQuery.datepicker.formatDate(date_format, date);
+				//Exclude Saturdays and Sundays as per the settings here /admin/morders/setting
+				return [ unavailable_dates.indexOf(dmy) == -1 && day != 6 && day != 0]
+				}
+			});
+          
+          $('#quote_shipping').datepicker('setDate', '07/06/2023');
+          //161933000043667 - Hide Alternate Item Code.
+          /*$('.order-review table thead tr, .order-review table tbody tr').each(function() {
+            $(this).children(':nth-child(3)').hide();
+          });*/
+		});
+	});
+	//defaultDate calendar selection
+	mutationObserver.observe(document.getElementById('opc-review'), { attributes: true });
+  }
+
+</script>
